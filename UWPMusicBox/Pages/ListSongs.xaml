@@ -46,6 +46,7 @@
                     <Button Margin="250,0,0,0" Height="Auto" Width="60">Thêm</Button>
                     <Button Margin="250,2,0,0" Height="Auto" Width="60">Sửa</Button>
                     <Button Margin="250,2,0,0" Height="Auto" Width=" 60">Xóa</Button>
+                    <Button Margin="250,2,0,0" Height="Auto" Width=" 60" Click="DownLoadBtn_OnClick" x:Name="DownLoadBtn">Tải</Button>
                 </StackPanel>
             </RelativePanel>
 

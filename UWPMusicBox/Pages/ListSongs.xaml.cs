@@ -17,6 +17,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using UWPMusicBox.Entity;
 using UWPMusicBox.Services;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -104,6 +107,35 @@ namespace UWPMusicBox.Pages
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private async void DownLoadBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            string requestUri =
+                "https://upload.wikimedia.org/wikipedia/en/thumb/6/63/IMG_%28business%29.svg/1200px-IMG_%28business%29.svg.png";
+            string filename = "Nono.jpg";
+            if (requestUri == null)
+                throw new ArgumentNullException("requestUri");
+
+            await DownloadAsync(new Uri(requestUri), filename);
+        }
+
+        public async Task DownloadAsync(Uri requestUri, string filename)
+        {
+            if (filename == null)
+                throw new ArgumentNullException(filename);
+
+            using (var httpClient = new HttpClient())
+            {
+                using (var request = new HttpRequestMessage(HttpMethod.Get, requestUri))
+                {
+                    using (Stream contentStream = await (await httpClient.SendAsync(request)).Content.ReadAsStreamAsync(),
+                        stream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None, 10000, true))
+                    {
+                        await contentStream.CopyToAsync(stream);
+                    }
+                }
+            }
         }
     }
 }
